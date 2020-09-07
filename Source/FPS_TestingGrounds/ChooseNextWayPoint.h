@@ -16,4 +16,9 @@ class FPS_TESTINGGROUNDS_API UChooseNextWayPoint : public UBTTaskNode
 
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory);
 	
+protected:
+
+	UPROPERTY(EditAnywhere, Category = "BlackBoard")
+	struct FBlackboardKeySelector IndexKey;
+
 };
