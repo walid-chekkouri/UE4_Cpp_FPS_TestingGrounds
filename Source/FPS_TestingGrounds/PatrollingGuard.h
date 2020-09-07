@@ -15,7 +15,10 @@ class FPS_TESTINGGROUNDS_API APatrollingGuard : public ATP_ThirdPersonCharacter
 	GENERATED_BODY()
 
 
+public: //TODO: Remove or create Get Function instead
 	UPROPERTY(EditInstanceOnly, Category = "PatrolRoute")
 	TArray<AActor*> PatrolPointsCPP;
+
+
 	
 };
