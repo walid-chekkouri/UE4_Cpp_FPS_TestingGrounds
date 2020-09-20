@@ -54,12 +54,12 @@ bool ATile::CastSphere(FVector Location, float Radius)
 		Location,
 		Location,
 		FQuat::Identity,
-		ECollisionChannel::ECC_Camera,
+		ECollisionChannel::ECC_GameTraceChannel2,
 		FCollisionShape::MakeSphere(Radius)
 	);
 
 	FColor ResultColor = HasHit? FColor::Red : FColor::Green;
-	DrawDebugSphere(GetWorld(), Location, Radius, 80, ResultColor, true, 100);//Location is the center of the sphere
+	DrawDebugCapsule(GetWorld(), Location,0 ,Radius, FQuat::Identity, ResultColor, true, 100);//Location is the center of the sphere
 
 	return HasHit;
 
