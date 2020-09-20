@@ -38,8 +38,8 @@ void ATile::PlaceActors(TSubclassOf<AActor> ToSpawn, int MinSpawn, int MaxSpawn)
 		//Generate random point inside the constraints of our box
 		FVector SpawnPoint = FMath::RandPointInBox(Bounds);//UE_LOG(LogTemp, Warning, TEXT("SpawnPoint: %s"), *SpawnPoint.ToCompactString());
 		AActor* Spawned = GetWorld()->SpawnActor<AActor>(ToSpawn);
-
-
+		Spawned->SetActorRelativeLocation(SpawnPoint);
+		Spawned->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepRelative,false ));//Attach to tile
 	}
 
 }
