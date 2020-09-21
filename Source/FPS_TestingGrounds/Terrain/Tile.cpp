@@ -18,7 +18,7 @@ void ATile::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	CastSphere(GetActorLocation(), 300);
+
 }
 
 // Called every frame
@@ -28,26 +28,53 @@ void ATile::Tick(float DeltaTime)
 
 }
 
-void ATile::PlaceActors(TSubclassOf<AActor> ToSpawn, int MinSpawn, int MaxSpawn)
+void ATile::PlaceActors(TSubclassOf<AActor> ToSpawn, int MinSpawn, int MaxSpawn, float Radius)
+{
+	int NumberToSpawn = FMath::RandRange(MinSpawn, MaxSpawn);
+	for (size_t i = 0; i < NumberToSpawn; i++)
+	{
+		FVector SpawnPoint;
+		bool found = FindEmptyLocation(SpawnPoint, Radius);
+		if (found)
+		{
+			PlaceActor(ToSpawn, SpawnPoint);
+		}
+		
+	}
+	
+}
+
+//Attempts to find an empty location
+bool ATile::FindEmptyLocation(FVector& OutLocation, float Radius)
 {
 	FVector Min(0, -2000, 0);
 	FVector Max(4000, 2000, 0);
 	FBox Bounds(Min, Max);
-	
-	int NumberToSpawn = FMath::RandRange(MinSpawn, MaxSpawn);
-	for (size_t i = 0; i < NumberToSpawn; i++)
+
+	const int MAX_ATTEMPTS = 100;
+	for (size_t i = 0; i < MAX_ATTEMPTS; i++)
 	{
-		//Generate random point inside the constraints of our box
-		FVector SpawnPoint = FMath::RandPointInBox(Bounds);//UE_LOG(LogTemp, Warning, TEXT("SpawnPoint: %s"), *SpawnPoint.ToCompactString());
-		AActor* Spawned = GetWorld()->SpawnActor<AActor>(ToSpawn);
-		Spawned->SetActorRelativeLocation(SpawnPoint);
-		Spawned->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepRelative,false ));//Attach to tile
+		FVector CandidatePoint = FMath::RandPointInBox(Bounds);
+		if (CanSpawnAtLocation(CandidatePoint, Radius))
+		{
+			OutLocation = CandidatePoint;
+			return true;
+		}
 	}
 
+	//Generate random point inside the constraints of our box
+	return false;//UE_LOG(LogTemp, Warning, TEXT("SpawnPoint: %s"), *SpawnPoint.ToCompactString());
+}
+
+void ATile::PlaceActor(TSubclassOf<AActor> ToSpawn, FVector SpawnPoint)
+{
+	AActor* Spawned = GetWorld()->SpawnActor<AActor>(ToSpawn);
+	Spawned->SetActorRelativeLocation(SpawnPoint);
+	Spawned->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false));//Attach to tile
 }
 
 
-bool ATile::CastSphere(FVector Location, float Radius)
+bool ATile::CanSpawnAtLocation(FVector Location, float Radius)
 {
 	FHitResult HitResult;
 	bool HasHit = GetWorld()->SweepSingleByChannel(HitResult,
@@ -61,7 +88,9 @@ bool ATile::CastSphere(FVector Location, float Radius)
 	FColor ResultColor = HasHit? FColor::Red : FColor::Green;
 	DrawDebugCapsule(GetWorld(), Location,0 ,Radius, FQuat::Identity, ResultColor, true, 100);//Location is the center of the sphere
 
-	return HasHit;
+	return !HasHit;
 
 }
+
+
 
