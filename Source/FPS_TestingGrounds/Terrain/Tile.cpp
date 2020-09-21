@@ -54,7 +54,7 @@ bool ATile::FindEmptyLocation(FVector& OutLocation, float Radius)
 	const int MAX_ATTEMPTS = 100;
 	for (size_t i = 0; i < MAX_ATTEMPTS; i++)
 	{
-		FVector CandidatePoint = FMath::RandPointInBox(Bounds);
+		FVector CandidatePoint = FMath::RandPointInBox(Bounds);//In local space
 		if (CanSpawnAtLocation(CandidatePoint, Radius))
 		{
 			OutLocation = CandidatePoint;
@@ -77,16 +77,18 @@ void ATile::PlaceActor(TSubclassOf<AActor> ToSpawn, FVector SpawnPoint)
 bool ATile::CanSpawnAtLocation(FVector Location, float Radius)
 {
 	FHitResult HitResult;
+	FVector GlobalLocation = ActorToWorld().TransformPosition(Location);//Convert Local position to global position
+
 	bool HasHit = GetWorld()->SweepSingleByChannel(HitResult,
-		Location,
-		Location,
+		GlobalLocation,
+		GlobalLocation,
 		FQuat::Identity,
 		ECollisionChannel::ECC_GameTraceChannel2,
 		FCollisionShape::MakeSphere(Radius)
 	);
 
 	FColor ResultColor = HasHit? FColor::Red : FColor::Green;
-	DrawDebugCapsule(GetWorld(), Location,0 ,Radius, FQuat::Identity, ResultColor, true, 100);//Location is the center of the sphere
+	DrawDebugCapsule(GetWorld(), GlobalLocation,0 ,Radius, FQuat::Identity, ResultColor, true, 100);//Location is the center of the sphere
 
 	return !HasHit;
 
