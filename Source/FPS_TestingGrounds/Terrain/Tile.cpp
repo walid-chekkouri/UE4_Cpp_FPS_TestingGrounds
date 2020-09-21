@@ -37,7 +37,8 @@ void ATile::PlaceActors(TSubclassOf<AActor> ToSpawn, int MinSpawn, int MaxSpawn,
 		bool found = FindEmptyLocation(SpawnPoint, Radius);
 		if (found)
 		{
-			PlaceActor(ToSpawn, SpawnPoint);
+			float RandomRotation = FMath::RandRange(-180.f, 180.f);//Generate random float in range
+			PlaceActor(ToSpawn, SpawnPoint, RandomRotation);
 		}
 		
 	}
@@ -66,11 +67,12 @@ bool ATile::FindEmptyLocation(FVector& OutLocation, float Radius)
 	return false;//UE_LOG(LogTemp, Warning, TEXT("SpawnPoint: %s"), *SpawnPoint.ToCompactString());
 }
 
-void ATile::PlaceActor(TSubclassOf<AActor> ToSpawn, FVector SpawnPoint)
+void ATile::PlaceActor(TSubclassOf<AActor> ToSpawn, FVector SpawnPoint, float Rotation)
 {
 	AActor* Spawned = GetWorld()->SpawnActor<AActor>(ToSpawn);
 	Spawned->SetActorRelativeLocation(SpawnPoint);
 	Spawned->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false));//Attach to tile
+	Spawned->SetActorRotation(FRotator(0, Rotation, 0));
 }
 
 
