@@ -7,6 +7,9 @@
 #include "Components/HierarchicalInstancedStaticMeshComponent.h"
 #include "GrassComponent.generated.h"
 
+/*
+Flyweight Pattern
+*/
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class FPS_TESTINGGROUNDS_API UGrassComponent : public UHierarchicalInstancedStaticMeshComponent
