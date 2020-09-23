@@ -26,5 +26,5 @@ void UActorPool::Return(AActor* ActorToReturn)
 
 void UActorPool::Add(AActor* ActorToAdd)
 {
-
+	Return(ActorToAdd);
 }
