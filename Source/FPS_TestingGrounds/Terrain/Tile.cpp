@@ -41,9 +41,9 @@ void ATile::PositionNavMeshBoundsVolume()
 	NavMeshBoundsVolume->SetActorLocation(GetActorLocation() + NavigationBoundsOffset);
 
 	
-	//GetWorld()->GetNavigationSystem()->Build();//Rebuild the navigation system
+	
 	UNavigationSystemV1* NavSystem = Cast<UNavigationSystemV1>(GetWorld()->GetNavigationSystem());
-	NavSystem->Build();
+	NavSystem->Build();//Insteaf of GetWorld()->GetNavigationSystem()->Build();//Rebuild the navigation system
 }
 
 
