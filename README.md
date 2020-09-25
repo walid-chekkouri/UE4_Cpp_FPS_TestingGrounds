@@ -20,8 +20,9 @@ Garbage Collection for procedural generation of tiles
 Spawning actors only in free spaces
 
 **Design Patterns followed:**
-Flyweight Design Pattern: When using Hierarchical Instanced Static Meshes
-Pool Design Pattern: For creating and using navMeshVolumes
+-Flyweight Design Pattern: When using Hierarchical Instanced Static Meshes.
+
+-Pool Design Pattern: For creating and using navMeshVolumes.
 
 UE4 Version used: 4.22.3
 
